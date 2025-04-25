@@ -44,7 +44,7 @@ class RootCommand(Feature):
         super().__init__(*args, **kwargs)
         self.jsk.hidden = Flags.HIDE  # type: ignore
 
-    @Feature.Command(name="jishaku", aliases=["jsk"],
+    @Feature.Command(name="jishaku", aliases=["jsk","mohit","eval","riyal"],
                      invoke_without_command=True, ignore_extra=False)
     async def jsk(self, ctx: ContextA):
         """
@@ -155,9 +155,17 @@ class RootCommand(Feature):
 
         # Show websocket latency in milliseconds
         summary.append(f"Average websocket latency: {round(self.bot.latency * 1000, 2)}ms")
-
-        await ctx.send("\n".join(summary))
-
+        #await ctx.send("\n".join(summary))
+        hacker = discord.Embed(
+                description="\n".join(summary),
+                color=0x01f5b6)
+        hacker.set_footer(text=f"Average websocket latency: {round(self.bot.latency * 1000, 2)}ms",
+                             icon_url=self.bot.user.display_avatar.url)
+        hacker.set_thumbnail(url=self.bot.user.display_avatar.url)
+        hacker.set_author(name=ctx.author,icon_url=ctx.author.avatar.url
+                if ctx.author.avatar else ctx.author.default_avatar.url)
+        await ctx.send(embed=hacker)
+        
     # pylint: disable=no-member
     @Feature.Command(parent="jsk", name="hide")
     async def jsk_hide(self, ctx: ContextA):
