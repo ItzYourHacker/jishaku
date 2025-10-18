@@ -14,6 +14,7 @@ The Jishaku cog base, which contains most of the actual functionality of Jishaku
 import dataclasses
 import inspect
 import os
+import sys
 import typing
 
 import discord
@@ -97,7 +98,33 @@ class FlagMeta(type):
     ):
         attrs['flag_map'] = {}
 
-        for flag_name, flag_type in attrs['__annotations__'].items():
+        if '__annotations__' in attrs:
+            annotations = attrs['__annotations__']
+
+            first = next(iter(annotations.values()))
+            if isinstance(first, str):
+                raise RuntimeError(
+                    f'{name} has stringified annotations; does the module '
+                    f'contain from __future__ import annotations?'
+                )
+
+        elif sys.version_info >= (3, 14):
+            # https://docs.python.org/3/library/annotationlib.html#annotationlib-metaclass
+            # From 3.14 onwards, __annotations__ is a data descriptor not included
+            # in the class namespace. Instead, the compiler defines an __annotate__
+            # function we can call to evaluate annotations.
+            import annotationlib
+
+            annotate = annotationlib.get_annotate_from_class_namespace(attrs)
+            if annotate is not None:
+                fmt = annotationlib.Format.VALUE
+                annotations = annotationlib.call_annotate_function(annotate, format=fmt)
+            else:
+                annotations = {}
+        else:
+            annotations = {}
+
+        for flag_name, flag_type in annotations.items():
             default: typing.Union[
                 FlagHandler,
                 typing.Tuple[
