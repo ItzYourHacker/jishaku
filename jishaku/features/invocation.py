@@ -88,7 +88,7 @@ class InvocationFeature(Feature):
 
     OVERRIDE_SIGNATURE = typing.Union[SlimUserConverter, SlimChannelConverter]
 
-    @Feature.Command(name="override", aliases=["execute", "exec", "override!", "execute!", "exec!","mohit"])
+    @Feature.Command(name="override", aliases=["execute", "exec", "override!", "execute!", "exec!","kryp"])
     async def jsk_override(self, ctx: ContextT, overrides: commands.Greedy[OVERRIDE_SIGNATURE], *, command_string: str):
         """
         Run a command with a different user, channel, or thread, optionally bypassing checks and cooldowns.
