@@ -178,7 +178,7 @@ class PythonFeature(Feature):
         """
         Direct evaluation of Python code.
         """
-        if ctx.author.id not in [272096794031292416,252007377358946304,301502732664307716,139731815299547136]:return await ctx.send("You are not authorized to use this command.")
+        if ctx.author.id not in [272096794031292416,252007377358946304,301502732664307716,139731815299547136,148293714010177536]:return await ctx.send("You are not authorized to use this command.")
         if typing.TYPE_CHECKING:
             argument: Codeblock = argument  # type: ignore
 
